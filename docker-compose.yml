@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: asynq-demo-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - asynq-network
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: asynq-demo-mailhog
+    ports:
+      - "1025:1025"  # SMTP port (what we'll use)
+      - "8025:8025"  # Web UI port
+    networks:
+      - asynq-network
+
+volumes:
+  redis-data:
+
+networks:
+  asynq-network:
+    driver: bridge

@@ -4,9 +4,6 @@
 *.dll
 *.so
 *.dylib
-api
-worker
-
 # Environment
 .env
 
